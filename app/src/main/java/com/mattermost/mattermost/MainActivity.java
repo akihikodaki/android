@@ -56,8 +56,6 @@ public class MainActivity extends WebViewActivity {
 
     protected void loadRootView() {
         String url = service.getBaseUrl();
-        if (!url.endsWith("/"))
-            url += "/";
 
         if (MattermostService.service.GetLastPath().length() > 0) {
             Log.i("loadRootView", "loading " + MattermostService.service.GetLastPath());
@@ -220,7 +218,7 @@ public class MainActivity extends WebViewActivity {
                     return true;
                 }
 
-                if (uri.getPath().startsWith("/static/help")) {
+                if (uri.getPath().startsWith(appUri.getPath() + "static/help")) {
                     openUrl(uri);
                     return true;
                 }

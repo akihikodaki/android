@@ -76,24 +76,20 @@ public class MattermostService {
     }
 
     public void init(String baseUrl) {
-        this.baseUrl = baseUrl;
-        preferences.edit().putString("baseUrl", baseUrl).commit();
+        this.baseUrl = baseUrl.endsWith("/") ? baseUrl : baseUrl + "/";
+        preferences.edit().putString("baseUrl", this.baseUrl).commit();
 
         Retrofit.Builder builder = new Retrofit.Builder();
-        builder.baseUrl(baseUrl);
+        builder.baseUrl(this.baseUrl);
         builder.client(client);
         builder.addConverterFactory(JacksonConverterFactory.create());
         builder.addCallAdapterFactory(PromiseConverterFactory.create());
 
         retrofit = builder.build();
 
-        String url = baseUrl;
-        if (url.endsWith("/")) {
-            url = url.substring(0, url.length() - 1);
-        }
-//        int i = url.lastIndexOf("/");
+//        int i = this.baseUrl.lastIndexOf("/", this.baseUrl.length() - 2);
 //        if (i != -1) {
-//            String team = url.substring(i + 1);
+//            String team = this.baseUrl.substring(i + 1);
 //            setTeam(team);
 //        }
 
@@ -202,26 +198,26 @@ public class MattermostService {
     public interface MattermostAPI {
 
         @Headers("X-Requested-With: XMLHttpRequest")
-        @POST("/api/v3/users/attach_device")
+        @POST("api/v3/users/attach_device")
         Promise<User> attachDevice(@Body User user);
 
         @Headers("X-Requested-With: XMLHttpRequest")
-        @GET("/api/v3/users/initial_load")
+        @GET("api/v3/users/initial_load")
         Promise<InitialLoad> initialLoad();
 
-//        @POST("/api/v1/users/login")
+//        @POST("api/v1/users/login")
 //        Promise<User> login(@Body User user);
 //
-//        @POST("/api/v1/users/send_password_reset")
+//        @POST("api/v1/users/send_password_reset")
 //        Promise<User> sendPaswordReset(@Body User user);
 //
-//        @POST("/api/v1/teams/find_team_by_name")
+//        @POST("api/v1/teams/find_team_by_name")
 //        Promise<Boolean> findTeamByName(@Body User user);
 //
-//        @POST("/api/v1/teams/email_teams")
+//        @POST("api/v1/teams/email_teams")
 //        Promise<List<User>> findTeams(@Body User user);
 //
-//        @POST("/api/v1/teams/signup")
+//        @POST("api/v1/teams/signup")
 //        Promise<User> signup(@Body User user);
     }
 }
